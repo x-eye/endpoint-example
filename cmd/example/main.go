@@ -1,11 +1,15 @@
 package main
 
 import (
+	"context"
 	"example/configs"
 	"example/internal/services"
+	"example/internal/storage"
 	"example/internal/validators"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
 	"regexp"
 
 	"github.com/utrack/clay/v2/transport/server"
@@ -19,7 +23,17 @@ func main() {
 	}
 	validator := validators.NewExampleValidator(id_re)
 
-	service := services.NewExampleService(validator)
+	ctx, cancel := context.WithCancel(context.Background())
+	done := make(chan os.Signal, 1)
+	signal.Notify(done, os.Kill, os.Interrupt)
+	go func() {
+		<-done
+		cancel()
+	}()
+
+	partner := storage.NewPartner(http.DefaultClient, cfg.PartnerUrl, cfg.PartnerQueueMaxLength)
+	go partner.Consume(ctx)
+	service := services.NewExampleService(validator, partner)
 
 	s := server.NewServer(cfg.Port)
 	err = s.Run(service)

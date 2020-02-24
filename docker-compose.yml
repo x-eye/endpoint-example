@@ -8,19 +8,11 @@ services:
     command: "/bin/sh -c 'while true; do nc -l -p 8080 < /data/http-ok.txt; done'"
     ports:
       - "8080:8080"
-  redis:
-    image: redis
-    ports:
-      - "6379:6379"
-    volumes:
-      - ./data/redis:/data
-    restart: always
   example:
     build: .
     ports:
     - "9003:9003"
     depends_on:
-      - redis
       - nc
     environment:
       - PARTNER_URL="http://nc:8080"
