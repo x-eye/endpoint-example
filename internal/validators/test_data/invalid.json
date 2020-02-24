@@ -1,0 +1,18 @@
+{
+  "probe_requests" : [
+    {
+      "mac" : "88-1D-FC-DF-6F-C1",
+      "timestamp" : "1579782767"
+    },
+    {
+      "mac" : "F8-59-71-PK-95-36",
+      "bssid" : "04-BF-6D-04-09-8C",
+      "timestamp" : "1579782767",
+      "ssid" : "SKOLTECH"
+    },
+    {
+      "mac" : "F8-59-71-PK-95-BB",
+      "timestamp" : "1579782767"
+    }
+  ]
+}
