@@ -3,6 +3,7 @@ module example
 go 1.13
 
 require (
+	github.com/Shopify/sarama v1.26.1
 	github.com/go-chi/chi v4.0.3+incompatible
 	github.com/go-openapi/spec v0.19.6
 	github.com/golang/protobuf v1.3.3
