@@ -33,7 +33,12 @@ func main() {
 
 	partner := storage.NewPartner(http.DefaultClient, cfg.PartnerUrl, cfg.PartnerQueueMaxLength)
 	go partner.Consume(ctx)
-	service := services.NewExampleService(validator, partner)
+	producer, err := storage.NewKafkaProducer(cfg.KafkaTopic, cfg.KafkaAddr)
+	if err != nil {
+		log.Fatal(err)
+	}
+	senders := storage.NewSenderFanout(partner, producer)
+	service := services.NewExampleService(validator, senders)
 
 	s := server.NewServer(cfg.Port)
 	err = s.Run(service)
